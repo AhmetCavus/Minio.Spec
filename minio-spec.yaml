@@ -14,7 +14,7 @@ tags:
     description: "The endpoint for publish and subscribe within a namespace"
   - name: collection
     description: "CRUD operations for the collections. A collection is the represantation of a list of entries in the database"
-paths:
+paths:      
   /authenticate:
     post:
       tags:
@@ -43,14 +43,44 @@ paths:
         content:
           "application/json":
             schema:
-              $ref:  "#/components/schemas/authRegister"
+              $ref:  "#/components/schemas/authRegisterBody"
       responses:
         "200":
           description: Successfull response
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/authResponse'
+                $ref: '#/components/schemas/authRegisterResponse'
+  /collection/{schema}:
+    parameters:
+      - name: schema
+        in: path
+        description: The schema of the collection
+        required: true
+        schema:
+          type: string
+    get:
+      description: Gets a collection by name
+      responses:
+        '200':
+          description: OK
+      security:
+        - api_key: []
+  /collection/{schema}/{relations}:
+    parameters:
+      - name: relations
+        in: path
+        description: The depending models of the schema
+        required: true
+        schema:
+          type: array
+    get:
+      description: Gets a collection by name with resolving the relations
+      responses:
+        '200':
+          description: OK
+      security:
+        - api_key: []
   /channel/{channelId}:
     post:
       tags:
@@ -88,7 +118,16 @@ components:
         password:
           type: "string"
           description: "The password of the depending clientId"
-    authRegister:
+    authResponse:
+      type: object
+      properties:
+        success:
+          type: "boolean"
+          description: "Indicates whether the request was successfull or not"
+        token:
+          type: "string"
+          description: "The jwt token in order to verify further requests with the Rest API or Socket communication"
+    authRegisterBody:
       type: object
       properties:
         username:
@@ -100,12 +139,17 @@ components:
         password:
           type: "string"
           description: "The password of the depending clientId"
-    authResponse:
+    authRegisterResponse:
       type: object
       properties:
         success:
           type: "boolean"
           description: "Indicates whether the request was successfull or not"
-        token:
+        profile:
           type: "string"
           description: "The jwt token in order to verify further requests with the Rest API or Socket communication"
+  securitySchemes:
+    api_key:
+      type: apiKey
+      name: api_key
+      in: header
