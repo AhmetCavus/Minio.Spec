@@ -6,7 +6,7 @@ info:
 servers:
   - url: http://localhost:8080
 tags:
-  - name: authentication
+  - name: authenticate
     description: "The endpoint for authentication. Here you can register you clients in order to begin with the socket communication"
   - name: assset
     description: "The endpoint for managing necessary assets."
@@ -15,10 +15,10 @@ tags:
   - name: collection
     description: "CRUD operations for the collections. A collection is the represantation of a list of entries in the database"
 paths:
-  /auth:
+  /authenticate:
     post:
       tags:
-        - authentication
+        - authenticate
       summary: Authentication for retrieving the token
       description: Authenticate in order to get the token for further requests
       requestBody:
@@ -33,17 +33,17 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/authResponse'
-  /auth/create:
+  /authenticate/register:
     post:
       tags:
-        - auth
+        - authenticate
       summary: Create a new subscription
       description: Create a new subscription in order to get a token for further requests
       requestBody:
         content:
           "application/json":
             schema:
-              $ref:  "#/components/schemas/authBody"
+              $ref:  "#/components/schemas/authRegister"
       responses:
         "200":
           description: Successfull response
@@ -82,6 +82,18 @@ components:
     authBody:
       type: object
       properties:
+        email:
+          type: "string"
+          description: "A unique id like the mail address"
+        password:
+          type: "string"
+          description: "The password of the depending clientId"
+    authRegister:
+      type: object
+      properties:
+        username:
+          type: "string"
+          description: "A unique identifier for the profile"
         email:
           type: "string"
           description: "A unique id like the mail address"
