@@ -2,9 +2,10 @@ openapi: 3.0.1
 info:
   title: Minio Server
   description: "This is the api for Minio."
-  version: 1.0.0
+  version: 1.1.0
 servers:
   - url: http://localhost:8080
+  - url: https://yapptir.com
 tags:
   - name: authenticate
     description: "The endpoint for authentication. Here you can register you clients in order to begin with the socket communication"
@@ -60,27 +61,141 @@ paths:
         schema:
           type: string
     get:
+      tags:
+        - collection
+      summary: Gets a collection by name
       description: Gets a collection by name
       responses:
         '200':
           description: OK
       security:
-        - api_key: []
+        - bearerAuth: []
+    put:
+      tags:
+        - collection
+      summary: Replaces the whole collection with the given one 
+      description: Replaces the whole collection with the given one
+      requestBody:
+        content:
+          application/json:
+              schema: {
+                type: "array",
+                items:{
+                  type: "object"
+                }
+              }
+      responses:
+        "200":
+          description: Successfull response
+          content:
+            application/json:
+              schema: {
+                type: "array",
+                items: {
+                  type: "object"
+                }
+              }
+    post:
+      tags:
+        - collection
+      summary: Adds a new item to the collection
+      description: Adds a new item to the collection
+      requestBody:
+        content:
+          application/json:
+              schema: {
+                type: "object"
+              }
+      responses:
+        "200":
+          description: Successfull response
+          content:
+            application/json:
+              schema: {
+                type: "array",
+                items:{
+                  type: "object"
+                }
+              }
+      security:
+        - bearerAuth: []
+  /collection/{schema}/{id}:
+    parameters:
+      - name: schema
+        in: path
+        description: The schema of the collection
+        required: true
+        schema:
+          type: string
+      - name: id
+        in: path
+        description: The id of the item in the collection
+        required: true
+        schema:
+          type: string
+    put:
+      tags:
+        - collection
+      summary: Replaces the item in the collection with the one in the request body
+      description: Replaces the item in the collection with the one in the request body
+      requestBody:
+        content:
+          application/json:
+              schema: {
+                type: "object"
+              }
+      responses:
+        "200":
+          description: Successfull response
+          content:
+            application/json:
+              schema: {
+                type: "array",
+                items:{
+                  type: "object"
+                }
+              }
+    delete:
+      tags:
+        - collection
+      summary: Deletes the item in the collection that matches the id
+      description: Deletes the item in the collection that matches the id
+      responses:
+        "200":
+          description: Successfull response
+          content:
+            application/json:
+              schema: {
+                type: "array",
+                items:{
+                  type: "object"
+                }
+              }
   /collection/{schema}/{relations}:
     parameters:
+      - name: schema
+        in: path
+        description: The schema of the collection
+        required: true
+        schema:
+          type: string
       - name: relations
         in: path
         description: The depending models of the schema
         required: true
         schema:
           type: array
+          items: {}
     get:
+      tags:
+        - collection
+      summary: Gets a collection by name with resolving the relations
       description: Gets a collection by name with resolving the relations
       responses:
         '200':
           description: OK
       security:
-        - api_key: []
+        - bearerAuth: []
   /channel/{channelId}:
     post:
       tags:
@@ -149,7 +264,7 @@ components:
           type: "string"
           description: "The jwt token in order to verify further requests with the Rest API or Socket communication"
   securitySchemes:
-    api_key:
-      type: apiKey
-      name: api_key
-      in: header
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
