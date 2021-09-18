@@ -100,7 +100,7 @@ paths:
               schema: {
                 type: "array",
                 items: {
-                  type: "object"
+                  type: "string"
                 }
               }
     post:
@@ -122,7 +122,7 @@ paths:
               schema: {
                 type: "array",
                 items:{
-                  type: "object"
+                  type: "string"
                 }
               }
       security:
@@ -150,7 +150,7 @@ paths:
         content:
           application/json:
               schema: {
-                type: "string"
+                type: "object"
               }
       responses:
         "200":
@@ -232,7 +232,7 @@ paths:
         content:
           "application/json":
             schema:
-              $ref:  "#/components/schemas/authBody"
+              $ref: "#/components/schemas/authBody"
       responses:
         "200":
           description: Successfull response
