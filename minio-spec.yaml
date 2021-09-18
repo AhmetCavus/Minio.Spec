@@ -68,6 +68,15 @@ paths:
       responses:
         '200':
           description: OK
+          content:
+            application/json:
+              schema: {
+                type: "array",
+                items:{
+                  type: "object",
+                  additionalProperties: true
+                }
+              }
       security:
         - bearerAuth: []
     put:
@@ -142,7 +151,8 @@ paths:
         content:
           application/json:
               schema: {
-                type: "object"
+                type: "object",
+                additionalProperties: true
               }
       responses:
         "200":
@@ -152,7 +162,8 @@ paths:
               schema: {
                 type: "array",
                 items:{
-                  type: "object"
+                  type: "object",
+                  additionalProperties: true
                 }
               }
     delete:
@@ -168,7 +179,8 @@ paths:
               schema: {
                 type: "array",
                 items:{
-                  type: "object"
+                  type: "object",
+                  additionalProperties: true
                 }
               }
   /collection/{schema}/{relations}:
@@ -185,7 +197,9 @@ paths:
         required: true
         schema:
           type: array
-          items: {}
+          items: {
+            type: "string"
+          }
     get:
       tags:
         - collection
@@ -194,6 +208,15 @@ paths:
       responses:
         '200':
           description: OK
+          content:
+            application/json:
+              schema: {
+                type: "array",
+                items:{
+                  type: "object",
+                  additionalProperties: true
+                }
+              }
       security:
         - bearerAuth: []
   /channel/{channelId}:
