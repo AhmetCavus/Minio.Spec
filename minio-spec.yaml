@@ -73,8 +73,7 @@ paths:
               schema: {
                 type: "array",
                 items:{
-                  type: "object",
-                  additionalProperties: true
+                  type: "string"
                 }
               }
       security:
