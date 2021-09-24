@@ -2,7 +2,7 @@ openapi: 3.0.1
 info:
   title: Minio Server
   description: "This is the api for Minio."
-  version: 1.1.0
+  version: 1.2.0
 servers:
   - url: http://localhost:8080
   - url: https://yapptir.com
@@ -54,6 +54,16 @@ paths:
                 $ref: '#/components/schemas/authRegisterResponse'
   /collection/{schema}:
     parameters:
+      - name: isJson
+        in: query
+        description: Indicates whether to response with the collection schema
+        schema:
+          type: boolean
+      - name: createdAt
+        in: query
+        description: Specifies the starting date which filters the responses
+        schema:
+          type: string
       - name: schema
         in: path
         description: The schema of the collection
@@ -73,7 +83,7 @@ paths:
               schema: {
                 type: "array",
                 items:{
-                  type: "string"
+                  type: object
                 }
               }
       security:
@@ -89,7 +99,7 @@ paths:
               schema: {
                 type: "array",
                 items:{
-                  type: "object"
+                  type: object
                 }
               }
       responses:
@@ -100,9 +110,11 @@ paths:
               schema: {
                 type: "array",
                 items: {
-                  type: "string"
+                  type: object
                 }
               }
+      security:
+        - bearerAuth: []
     post:
       tags:
         - collection
@@ -120,10 +132,7 @@ paths:
           content:
             application/json:
               schema: {
-                type: "array",
-                items:{
-                  type: "string"
-                }
+                type: object
               }
       security:
         - bearerAuth: []
@@ -160,9 +169,11 @@ paths:
               schema: {
                 type: "array",
                 items:{
-                  type: "string"
+                  type: object
                 }
               }
+      security:
+        - bearerAuth: []
     delete:
       tags:
         - collection
@@ -176,11 +187,23 @@ paths:
               schema: {
                 type: "array",
                 items:{
-                  type: "string"
+                  type: object
                 }
               }
+      security:
+        - bearerAuth: []
   /collection/{schema}/{relations}:
     parameters:
+      - name: isJson
+        in: query
+        description: Indicates whether to response with the collection schema
+        schema:
+          type: boolean
+      - name: createdAt
+        in: query
+        description: Specifies the starting date which filters the responses
+        schema:
+          type: string
       - name: schema
         in: path
         description: The schema of the collection
@@ -209,7 +232,7 @@ paths:
               schema: {
                 type: "array",
                 items:{
-                  type: "string",
+                  type: object
                 }
               }
       security:
@@ -223,23 +246,19 @@ paths:
       parameters:
         - name: channelId
           in: path
-          description: ID of pet to update
+          description: The name of the channel
           required: true
           schema:
-            type: integer
-            format: int64
-      requestBody:
-        content:
-          "application/json":
-            schema:
-              $ref: "#/components/schemas/authBody"
+            type: string
       responses:
         "200":
           description: Successfull response
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/authResponse'
+                $ref: '#/components/schemas/createChannelResponse'
+      security:
+        - bearerAuth: []
 components:
   schemas:
     authBody:
@@ -281,6 +300,15 @@ components:
         profile:
           type: "string"
           description: "The jwt token in order to verify further requests with the Rest API or Socket communication"
+    createChannelResponse:
+      type: object
+      properties:
+        success:
+          type: "boolean"
+          description: "Indicates whether the request was successfull or not"
+        createdChannel:
+          type: "string"
+          description: "The name of the channel created recently"
   securitySchemes:
     bearerAuth:
       type: http

@@ -1,0 +1,1 @@
+openapi-generator generate -i https://raw.githubusercontent.com/AhmetCavus/Minio.Spec/main/minio-spec.yaml -g dart -c minio-spec.config -o Minio.ApiGatewayDart
