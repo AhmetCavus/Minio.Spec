@@ -2,7 +2,7 @@ openapi: 3.0.1
 info:
   title: Minio Server
   description: "This is the api for Minio."
-  version: 1.2.0
+  version: 1.2.1
 servers:
   - url: http://localhost:8080
   - url: https://yapptir.com
@@ -212,13 +212,10 @@ paths:
           type: string
       - name: relations
         in: path
-        description: The depending models of the schema
+        description: Provide the depending schemas in order to get a resolved object. The relations value should be filled like "schema1 schema2 schemaN" 
         required: true
         schema:
-          type: array
-          items: {
-            type: "string"
-          }
+          type: string
     get:
       tags:
         - collection
