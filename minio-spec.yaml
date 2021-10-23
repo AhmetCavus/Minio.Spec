@@ -2,7 +2,7 @@ openapi: 3.0.1
 info:
   title: Minio Server
   description: "This is the api for Minio."
-  version: 1.3.0
+  version: 1.4.0
 servers:
   - url: http://localhost:8080
   - url: https://yapptir.com
@@ -54,11 +54,6 @@ paths:
                 $ref: '#/components/schemas/authRegisterResponse'
   /collection/{schema}:
     parameters:
-      - name: isJson
-        in: query
-        description: Indicates whether to response with the collection schema
-        schema:
-          type: boolean
       - name: createdAt
         in: query
         description: Specifies the starting date which filters the responses
@@ -150,6 +145,24 @@ paths:
         required: true
         schema:
           type: string
+    get:
+      tags:
+        - collection
+      summary: Gets the item in the collection depending on the given id
+      description: Provides an auto populated collection item. The references are resolved into corresponding models. The recursive lookup takes place for up to 5 nested references.
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema: {
+                type: "array",
+                items:{
+                  type: object
+                }
+              }
+      security:
+        - bearerAuth: []
     put:
       tags:
         - collection
@@ -194,11 +207,6 @@ paths:
         - bearerAuth: []
   /collection/{schema}/populated:
     parameters:
-      - name: isJson
-        in: query
-        description: Indicates whether to response with the collection schema
-        schema:
-          type: boolean
       - name: createdAt
         in: query
         description: Specifies the starting date which filters the responses
@@ -215,6 +223,38 @@ paths:
         - collection
       summary: Gets a collection by name with resolving the relations
       description: Provides an auto populated collection. The references are resolved into corresponding models. The recursive lookup takes place for up to 5 nested references.
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema: {
+                type: "array",
+                items:{
+                  type: object
+                }
+              }
+      security:
+        - bearerAuth: []
+  /collection/{schema}/{id}/populated:
+    parameters:
+        - name: id
+          in: path
+          description: The id of the item in the collection
+          required: true
+          schema:
+            type: string
+        - name: schema
+          in: path
+          description: The schema of the collection
+          required: true
+          schema:
+            type: string
+    get:
+      tags:
+        - collection
+      summary: Gets the populated item in the collection depending on the given id
+      description: Provides an auto populated collection item. The references are resolved into corresponding models. The recursive lookup takes place for up to 5 nested references.
       responses:
         '200':
           description: OK
